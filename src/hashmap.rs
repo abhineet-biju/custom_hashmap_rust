@@ -35,4 +35,23 @@ impl<K: Hash + Eq, V> HashMap<K, V> {
             self.len as f64 / self.buckets.len() as f64
         }
     }
+
+    /// Insert or update a key - value pair
+    pub fn insert(&mut self, key: K, value: V) -> Option<V> {
+        if self.load_factor() > 0.75 {
+            self.resize();
+        }
+
+        let index = self.calc_bucket_index(&key);
+        let bucket = &mut self.buckets[index];
+
+        for (k, v) in bucket.iter_mut() {
+            if k == &key {
+                return Some(std::mem::replace(v, value)); //update existing and return
+            }
+        }
+        bucket.push((key, value));
+        self.len += 1;
+        None
+    }
 }
