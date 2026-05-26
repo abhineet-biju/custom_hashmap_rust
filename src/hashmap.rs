@@ -19,4 +19,20 @@ impl<K: Hash + Eq, V> HashMap<K, V> {
         let buckets = (0..capacity).map(|_| Vec::new()).collect();
         Self { buckets, len: 0 }
     }
+
+    /// Computes bucket index for given key
+    pub fn calc_bucket_index(&self, key: &K) -> usize {
+        let mut hasher = DefaultHasher::new();
+        key.hash(&mut hasher);
+        let hash = hasher.finish();
+        (hash % self.buckets.len() as u64) as usize
+    }
+
+    pub fn load_factor(&self) -> f64 {
+        if self.buckets.is_empty() {
+            0.0 as f64
+        } else {
+            self.len as f64 / self.buckets.len() as f64
+        }
+    }
 }
