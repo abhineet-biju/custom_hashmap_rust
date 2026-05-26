@@ -3,6 +3,7 @@
 
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
+use std::iter::Map;
 
 pub struct HashMap<K, V> {
     buckets: Vec<Vec<(K, V)>>,
@@ -102,5 +103,23 @@ impl<K: Hash + Eq, V> HashMap<K, V> {
         }
 
         None
+    }
+
+    /// Double the size of the buckets
+    pub fn resize(&mut self) {
+        let new_capacity = self.buckets.len() * 2;
+        let mut new_buckets: Vec<Vec<(K, V)>> = (0..new_capacity).map(|_| Vec::new()).collect();
+
+        for bucket in self.buckets.drain(..) {
+            for (k, v) in bucket {
+                let mut hasher = DefaultHasher::new();
+                k.hash(&mut hasher);
+                let hash = hasher.finish();
+                let new_index = (hash % new_capacity as u64) as usize;
+                new_buckets[new_index].push((k, v));
+            }
+        }
+
+        self.buckets = new_buckets;
     }
 }
