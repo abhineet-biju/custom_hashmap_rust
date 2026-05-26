@@ -54,4 +54,16 @@ impl<K: Hash + Eq, V> HashMap<K, V> {
         self.len += 1;
         None
     }
+
+    /// Search for a key (will return reference to value)
+    pub fn get(&self, key: &K) -> Option<&V> {
+        let index = self.calc_bucket_index(key);
+        let bucket = &self.buckets[index];
+        for (k, v) in bucket.iter() {
+            if k == key {
+                return Some(v);
+            }
+        }
+        None
+    }
 }
