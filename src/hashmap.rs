@@ -80,4 +80,19 @@ impl<K: Hash + Eq, V> HashMap<K, V> {
 
         None
     }
+
+    /// Remove a key
+    pub fn remove(&mut self, key: &K) -> Option<V> {
+        let index = self.calc_bucket_index(key);
+        let bucket = &mut self.buckets[index];
+        for i in 0..bucket.len() {
+            if &bucket[i].0 == key {
+                let (_, value) = bucket.swap_remove(i);
+                self.len -= 1;
+                return Some(value);
+            }
+        }
+
+        None
+    }
 }
