@@ -14,6 +14,14 @@ impl<K: Hash + Eq, V> HashMap<K, V> {
         Self::with_capacity(16)
     }
 
+    pub fn len(&self) -> usize {
+        self.len
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.len == 0
+    }
+
     /// Initializes HashMap with given capacity
     pub fn with_capacity(capacity: usize) -> Self {
         let buckets = (0..capacity).map(|_| Vec::new()).collect();
