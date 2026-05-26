@@ -3,7 +3,6 @@
 
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
-use std::iter::Map;
 
 pub struct HashMap<K, V> {
     buckets: Vec<Vec<(K, V)>>,
