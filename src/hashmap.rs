@@ -64,6 +64,20 @@ impl<K: Hash + Eq, V> HashMap<K, V> {
                 return Some(v);
             }
         }
+
+        None
+    }
+
+    /// Search and allow value update
+    pub fn get_mut(&mut self, key: &K) -> Option<&mut V> {
+        let index = self.calc_bucket_index(key);
+        let bucket = &mut self.buckets[index];
+        for (k, v) in bucket.iter_mut() {
+            if k == key {
+                return Some(v);
+            }
+        }
+
         None
     }
 }
